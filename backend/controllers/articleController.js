@@ -3,11 +3,12 @@ const Article = require("../models/Article");
 // CREATE ARTICLE
 exports.createArticle = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, category } = req.body;
 
     const article = await Article.create({
       title,
       content,
+      category: category || "Other",
       image: req.file ? req.file.path : "",
       author: req.user._id,
     });

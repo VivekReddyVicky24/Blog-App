@@ -1,77 +1,8 @@
-body {
+/* Clear existing styles - global.css will handle all styling */
+
+/* Only keep minimal resets if needed */
+* {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #0F172A;
-  color: #E2E8F0;
-}
-
-/* container */
-.container {
-  width: 90%;
-  max-width: 1100px;
-  margin: auto;
-  padding-top: 20px;
-}
-
-/* headings */
-h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-h3 {
-  margin-bottom: 10px;
-}
-
-/* card */
-.card {
-  background: #1E293B;
-  padding: 18px;
-  border-radius: 14px;
-  margin-bottom: 18px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-}
-
-/* buttons */
-.btn {
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #6366F1, #4F46E5);
-  color: white;
-}
-
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-.btn-danger {
-  background: #EF4444;
-  color: white;
-}
-
-.btn-warning {
-  background: #F59E0B;
-  color: white;
-}
-
-.btn-success {
-  background: #22C55E;
-  color: white;
-}
-
-.btn:hover {
-  opacity: 0.9;
+  padding: 0;
+  box-sizing: border-box;
 }

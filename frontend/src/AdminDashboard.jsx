@@ -1,89 +1,22 @@
-import { useEffect, useState } from "react";
-import API from "../services/api";
+// src/pages/AdminDashboard/AdminDashboard.jsx
+// Replace your existing admin page JSX — keep ALL API calls and state logic unchanged.
+// Only the rendering section changes.
 
-const AdminDashboard = () => {
-  const [users, setUsers] = useState([]);
-  const [articles, setArticles] = useState([]);
-  const [deleted, setDeleted] = useState([]);
+import { useState } from 'react';
+// import { useAuth } from '../../context/AuthContext';
+// import { useAdminData } from '../../hooks/useAdminData'; // your existing hook
+
+// ── Paste your existing data-fetching logic above the return ──────────────
+// const { users, articles, deletedArticles, ... } = useAdminData();
+
+export default function AdminDashboard() {
+  // ── Replace placeholders with your real state/data ──────────
+  const stats = { users: 0, articles: 0, deleted: 0, comments: 0 };
+  const users = [];
+  const articles = [];
+  const deletedArticles = [];
   const [activeTab, setActiveTab] = useState('users');
-
-  const fetchUsers = async () => {
-    const { data } = await API.get("/admin/users");
-    setUsers(data);
-  };
-
-  const fetchArticles = async () => {
-    const { data } = await API.get("/admin/articles");
-    setArticles(data);
-  };
-
-  const fetchDeleted = async () => {
-    try {
-      const { data } = await API.get("/articles/deleted");
-      setDeleted(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-    fetchArticles();
-    fetchDeleted();
-  }, []);
-
-  const toggleUser = async (id) => {
-    try {
-      await API.put(`/admin/users/${id}`);
-      fetchUsers();
-    } catch (error) {
-      console.error("Toggle failed:", error);
-      alert("Failed to toggle user status");
-    }
-  };
-
-  const deleteUser = async (id) => {
-    try {
-      await API.delete(`/admin/users/${id}`);
-      fetchUsers();
-    } catch (error) {
-      console.error("Delete failed:", error);
-      alert("Failed to delete user");
-    }
-  };
-
-  const deleteArticle = async (id) => {
-    try {
-      await API.delete(`/admin/articles/${id}`);
-      // Remove from UI instantly
-      setArticles(articles.filter(a => a._id !== id));
-    } catch (error) {
-      console.error("Delete failed:", error);
-      alert("Failed to delete article: " + (error.response?.data?.message || error.message));
-    }
-  };
-
-  const restoreArticle = async (id) => {
-    try {
-      await API.put(`/articles/restore/${id}`);
-
-      // refresh UI
-      fetchDeleted();
-      fetchArticles();
-
-    } catch (error) {
-      console.error("Restore failed", error);
-      alert("Failed to restore article");
-    }
-  };
-
-  // Calculate stats
-  const stats = { 
-    users: users.length, 
-    articles: articles.length, 
-    deleted: deleted.length, 
-    comments: 0 
-  };
+  // ────────────────────────────────────────────────────────────
 
   return (
     <div className="dashboard-layout">
@@ -96,6 +29,7 @@ const AdminDashboard = () => {
         <SidebarLink icon="👥" label="Users"       tab="users"    active={activeTab} onClick={setActiveTab} />
         <SidebarLink icon="📝" label="Articles"    tab="articles" active={activeTab} onClick={setActiveTab} />
         <SidebarLink icon="🗑️" label="Trash"       tab="trash"    active={activeTab} onClick={setActiveTab} />
+        <SidebarLink icon="💬" label="Comments"    tab="comments" active={activeTab} onClick={setActiveTab} />
       </aside>
 
       {/* ── Main content ────────────────────────────────── */}
@@ -114,6 +48,7 @@ const AdminDashboard = () => {
           <StatCard label="Total Users"    value={stats.users}    color="rose"  icon="👥" />
           <StatCard label="Published"      value={stats.articles} color="sky"   icon="📝" />
           <StatCard label="In Trash"       value={stats.deleted}  color="cream" icon="🗑️" />
+          <StatCard label="Comments"       value={stats.comments} color="mint"  icon="💬" />
         </div>
 
         {/* ── Tab content ──────────────────────────────── */}
@@ -151,18 +86,9 @@ const AdminDashboard = () => {
                         <td><StatusBadge active={u.isActive} /></td>
                         <td>
                           <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
-                            <button 
-                              className="btn btn-sm btn-mint"
-                              onClick={() => toggleUser(u._id)}
-                            >
-                              {u.isActive ? "Deactivate" : "Activate"}
-                            </button>
-                            <button 
-                              className="btn btn-sm btn-danger"
-                              onClick={() => deleteUser(u._id)}
-                            >
-                              Delete
-                            </button>
+                            {/* ↓ Wire your existing handlers here */}
+                            <button className="btn btn-sm btn-mint">Activate</button>
+                            <button className="btn btn-sm btn-danger">Delete</button>
                           </div>
                         </td>
                       </tr>
@@ -202,12 +128,8 @@ const AdminDashboard = () => {
                         <td><span className="badge badge-mint">Published</span></td>
                         <td>
                           <div style={{ display: 'flex', gap: 'var(--sp-2)' }}>
-                            <button 
-                              className="btn btn-sm btn-danger"
-                              onClick={() => deleteArticle(a._id)}
-                            >
-                              Delete
-                            </button>
+                            <button className="btn btn-sm btn-ghost">Edit</button>
+                            <button className="btn btn-sm btn-danger">Delete</button>
                           </div>
                         </td>
                       </tr>
@@ -219,7 +141,7 @@ const AdminDashboard = () => {
           )}
 
           {activeTab === 'trash' && (
-            <Section title="Deleted Articles" badge={deleted.length}>
+            <Section title="Deleted Articles" badge={deletedArticles.length}>
               <div className="data-table-wrap">
                 <table className="data-table">
                   <thead>
@@ -231,24 +153,21 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {deleted.length === 0 && (
+                    {deletedArticles.length === 0 && (
                       <tr><td colSpan={4} style={{ textAlign: 'center', padding: 'var(--sp-8)', color: 'var(--text-muted)' }}>Trash is empty</td></tr>
                     )}
-                    {deleted.map(a => (
+                    {deletedArticles.map(a => (
                       <tr key={a._id}>
                         <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{a.title}</td>
                         <td>{a.author?.name}</td>
                         <td style={{ color: 'var(--text-muted)' }}>
-                          {new Date(a.deletedAt || a.createdAt).toLocaleDateString()}
+                          {new Date(a.deletedAt).toLocaleDateString()}
                         </td>
                         <td>
                           <div style={{ display: 'flex', gap: 'var(--sp-2)' }}>
-                            <button 
-                              className="btn btn-sm btn-sky"
-                              onClick={() => restoreArticle(a._id)}
-                            >
-                              Restore
-                            </button>
+                            {/* ↓ Wire your restore/hard-delete handlers */}
+                            <button className="btn btn-sm btn-sky">Restore</button>
+                            <button className="btn btn-sm btn-danger">Delete forever</button>
                           </div>
                         </td>
                       </tr>
@@ -262,10 +181,10 @@ const AdminDashboard = () => {
           {activeTab === 'stats' && (
             <Section title="Site Statistics">
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 'var(--sp-5)' }}>
-                <MetricBox label="Total Users" value={stats.users} />
-                <MetricBox label="Total Articles" value={stats.articles} />
-                <MetricBox label="Deleted Articles" value={stats.deleted} />
-                <MetricBox label="System Status" value="Active" />
+                <MetricBox label="Total reads" value="—" />
+                <MetricBox label="Avg read time" value="—" />
+                <MetricBox label="New users (30d)" value="—" />
+                <MetricBox label="Comments (30d)" value="—" />
               </div>
             </Section>
           )}
@@ -273,7 +192,7 @@ const AdminDashboard = () => {
       </main>
     </div>
   );
-};
+}
 
 // ── Sub-components ─────────────────────────────────────────────
 
@@ -335,5 +254,3 @@ function MetricBox({ label, value }) {
     </div>
   );
 }
-
-export default AdminDashboard;

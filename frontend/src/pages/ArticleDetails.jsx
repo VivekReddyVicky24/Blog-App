@@ -1,26 +1,34 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../services/api";
+import CommentsSection from "../CommentsSection";
 
 const ArticleDetails = () => {
   const { id } = useParams();
 
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
-  const [text, setText] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
 
   // fetch article
   const fetchArticle = async () => {
-    const { data } = await API.get(`/articles/${id}`);
-    setArticle(data);
+    try {
+      const { data } = await API.get(`/articles/${id}`);
+      setArticle(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // fetch comments
   const fetchComments = async () => {
-    const { data } = await API.get(`/comments/${id}`);
-    setComments(data);
+    try {
+      const { data } = await API.get(`/comments/${id}`);
+      setComments(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -29,85 +37,113 @@ const ArticleDetails = () => {
   }, [id]);
 
   // add comment
-  const addComment = async () => {
-    if (!text) return;
-
-    await API.post(`/comments/${id}`, { text });
-    setText("");
-    fetchComments();
+  const addComment = async (text) => {
+    try {
+      await API.post(`/comments/${id}`, { text });
+      fetchComments();
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      alert("Failed to add comment");
+    }
   };
 
   // delete comment
   const deleteComment = async (commentId) => {
-    await API.delete(`/comments/${commentId}`);
-    fetchComments();
+    try {
+      await API.delete(`/comments/${commentId}`);
+      fetchComments();
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+      alert("Failed to delete comment");
+    }
   };
 
-  if (!article) return <p>Loading...</p>;
+  if (!article) return <div className="container" style={{ paddingTop: 'var(--sp-12)', textAlign: 'center' }}>Loading...</div>;
+
+  const date = article.createdAt
+    ? new Date(article.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    : '';
 
   return (
-    <div className="container">
-      <h2>{article.title}</h2>
-
-      {article.image && (
-        <img
-          src={`http://localhost:5000/${article.image}`}
-          alt=""
-          style={{ width: "100%", borderRadius: "10px" }}
-        />
-      )}
-
-      <p>{article.content}</p>
-
-      <hr />
-
-      <h3>Comments</h3>
-
-      {/* Add Comment */}
-      {user && (
-        <div style={styles.commentBox}>
-          <input
-            className="input"
-            placeholder="Write a comment..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addComment()}
-            style={{ marginBottom: 0 }}
+    <article style={{ background: 'var(--bg-page)', minHeight: '100vh', paddingBottom: 'var(--sp-12)' }}>
+      {/* Hero image with shadow */}
+      {(article.coverImage || article.image) && (
+        <div style={{ width: '100%', height: 400, overflow: 'hidden', backgroundColor: 'var(--bg-subtle)', boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}>
+          <img
+            src={article.coverImage?.startsWith('http') ? article.coverImage : article.coverImage ? `http://localhost:5000/${article.coverImage}` : article.image?.startsWith('http') ? article.image : `http://localhost:5000/${article.image}`}
+            alt={article.title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-
-          <button className="btn btn-primary" onClick={addComment}>
-            Add Comment
-          </button>
         </div>
       )}
 
-      {/* Comments List */}
-      {comments.map((c) => (
-        <div key={c._id} className="card">
-          <p>{c.text}</p>
-          <small>By {c.user?.name}</small>
+      <div className="container" style={{ maxWidth: 'var(--container-md)', paddingTop: 'var(--sp-12)' }}>
+        {/* Article card wrapper */}
+        <div style={{ 
+          background: 'white', 
+          borderRadius: 'var(--r-lg)',
+          padding: 'var(--sp-10)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+          border: '1px solid var(--border-default)'
+        }}>
+          {/* Article header */}
+          <div style={{ marginBottom: 'var(--sp-8)' }}>
+            <div style={{ display: 'flex', gap: 'var(--sp-2)', alignItems: 'center', marginBottom: 'var(--sp-4)', flexWrap: 'wrap' }}>
+              {article.category && <span className="badge badge-sky">{article.category}</span>}
+              <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>{date}</span>
+            </div>
+            
+            <h1 className="h1" style={{ marginBottom: 'var(--sp-6)' }}>{article.title}</h1>
+            
+            {article.author && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+                <div className="avatar avatar-md avatar-rose">
+                  {article.author.name?.slice(0, 2).toUpperCase() ?? 'AU'}
+                </div>
+                <div>
+                  <p style={{ fontWeight: 500, color: 'var(--text-primary)', marginBottom: 2 }}>
+                    {article.author.name}
+                  </p>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>
+                    {article.author.role === 'admin' ? 'Admin Author' : 'Author'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
 
-          {user && (user._id === c.user._id || user.role === "admin") && (
-            <button
-              style={{ marginTop: "10px" }}
-              onClick={() => deleteComment(c._id)}
-            >
-              Delete
-            </button>
-          )}
+          {/* Divider */}
+          <hr style={{ borderColor: 'var(--border-weak)', marginBottom: 'var(--sp-8)' }} />
+
+          {/* Article content */}
+          <div style={{ 
+            fontSize: 'var(--text-lg)', 
+            lineHeight: 1.8, 
+            color: 'var(--text-primary)',
+            marginBottom: 'var(--sp-8)',
+            maxWidth: '100%',
+            wordWrap: 'break-word',
+            whiteSpace: 'pre-wrap'
+          }}>
+            {article.content}
+          </div>
+
+          {/* Divider */}
+          <hr style={{ borderColor: 'var(--border-weak)', marginBottom: 'var(--sp-10)' }} />
         </div>
-      ))}
-    </div>
-  );
-};
+      </div>
 
-const styles = {
-  commentBox: {
-    display: "flex",
-    gap: "12px",
-    alignItems: "center",
-    marginTop: "15px"
-  }
+      {/* Comments section */}
+      <div className="container" style={{ maxWidth: 'var(--container-md)', paddingTop: 'var(--sp-6)' }}>
+        <CommentsSection 
+          comments={comments}
+          onAddComment={addComment}
+          onDeleteComment={deleteComment}
+          currentUser={user}
+        />
+      </div>
+    </article>
+  );
 };
 
 export default ArticleDetails;

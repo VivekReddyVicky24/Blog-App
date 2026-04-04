@@ -1,0 +1,67 @@
+/* Navbar-specific styles — supplement global.css */
+.navbar__hamburger { display: none; }
+
+.navbar__dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xl);
+  min-width: 180px;
+  padding: var(--sp-2);
+  z-index: 200;
+  animation: fadeUp 180ms var(--ease-out) both;
+}
+
+.navbar__dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  transition: background var(--dur-fast), color var(--dur-fast);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+}
+
+.navbar__dropdown-item:hover           { background: var(--rose-light); color: var(--accent); }
+.navbar__dropdown-item--danger:hover   { background: #FEE2E2; color: #991B1B; }
+.navbar__dropdown-divider              { border: none; border-top: 1px solid var(--border-weak); margin: var(--sp-2) 0; }
+
+.navbar__mobile-menu {
+  display: none;
+  flex-direction: column;
+  padding: var(--sp-4) var(--sp-5);
+  border-top: 1px solid var(--border-weak);
+  background: var(--bg-surface);
+  gap: var(--sp-1);
+}
+
+.navbar__mobile-link {
+  display: block;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background var(--dur-fast), color var(--dur-fast);
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+.navbar__mobile-link:hover  { background: var(--rose-light); color: var(--accent); }
+.navbar__mobile-link.danger:hover { background: #FEE2E2; color: #991B1B; }
+.navbar__mobile-link.active { color: var(--accent); background: var(--rose-light); }
+
+@media (max-width: 768px) {
+  .navbar__hamburger { display: flex; }
+  .navbar__mobile-menu { display: flex; }
+}

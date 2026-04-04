@@ -1,9 +1,11 @@
-// Article card with design system theme
+// src/components/ArticleCard/ArticleCard.jsx
+// Drop-in card — pass your existing article data shape
+
 import { Link } from 'react-router-dom';
 
 export default function ArticleCard({ article }) {
   const {
-    _id, title, content, coverImage, image, category,
+    _id, title, excerpt, content, coverImage, image, category,
     author, createdAt, readTime,
   } = article;
 
@@ -15,15 +17,23 @@ export default function ArticleCard({ article }) {
     ? new Date(createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : '';
 
-  // Create excerpt from content if not provided
-  const excerpt = content ? content.slice(0, 120) + '...' : '';
+  // Get proper image URL
+  const imageUrl = (() => {
+    const img = coverImage || image;
+    if (!img) return null;
+    if (img.startsWith('http')) return img;
+    return `http://localhost:5000/${img}`;
+  })();
+
+  // Get excerpt from content if not provided
+  const displayExcerpt = excerpt || (content ? content.slice(0, 120) + '...' : '');
 
   return (
     <Link to={`/article/${_id}`} style={{ textDecoration: 'none', display: 'flex', height: '100%' }}>
       <article className="card article-card" style={{ width: '100%' }}>
         <div className="article-card__image">
-          {coverImage || image
-            ? <img src={coverImage || image} alt={title} loading="lazy" />
+          {imageUrl
+            ? <img src={imageUrl} alt={title} loading="lazy" />
             : <PlaceholderCover title={title} />}
         </div>
 
@@ -34,8 +44,8 @@ export default function ArticleCard({ article }) {
 
           <h3 className="article-card__title">{title}</h3>
 
-          {excerpt && (
-            <p className="article-card__excerpt">{excerpt}</p>
+          {displayExcerpt && (
+            <p className="article-card__excerpt">{displayExcerpt}</p>
           )}
 
           <div className="article-card__footer">
