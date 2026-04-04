@@ -42,8 +42,27 @@ const AdminDashboard = () => {
   };
 
   const deleteArticle = async (id) => {
-    await API.delete(`/admin/articles/${id}`);
-    fetchArticles();
+    try {
+      await API.delete(`/admin/articles/${id}`);
+      // Remove from UI instantly
+      setArticles(articles.filter(a => a._id !== id));
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete article: " + (error.response?.data?.message || error.message));
+    }
+  };
+
+  const restoreArticle = async (id) => {
+    try {
+      await API.put(`/articles/restore/${id}`);
+
+      // refresh UI
+      fetchDeleted();
+      fetchArticles();
+
+    } catch (error) {
+      console.error("Restore failed", error);
+    }
   };
 
   return (
@@ -57,11 +76,11 @@ const AdminDashboard = () => {
           <p>{u.name} ({u.role})</p>
           <p>{u.email}</p>
 
-          <button onClick={() => toggleUser(u._id)}>
+          <button className="btn btn-warning" onClick={() => toggleUser(u._id)}>
             {u.isActive ? "Deactivate" : "Activate"}
           </button>
 
-          <button onClick={() => deleteUser(u._id)}>
+          <button className="btn btn-danger" onClick={() => deleteUser(u._id)}>
             Delete
           </button>
         </div>

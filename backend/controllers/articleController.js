@@ -115,6 +115,13 @@ exports.restoreArticle = async (req, res) => {
       return res.status(404).json({ message: "Article not found" });
     }
 
+    if (
+      article.author.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
     article.isDeleted = false;
     article.deletedAt = null;
 

@@ -65,13 +65,16 @@ const ArticleDetails = () => {
 
       {/* Add Comment */}
       {user && (
-        <div>
+        <div style={styles.commentBox}>
           <input
             className="input"
             placeholder="Write a comment..."
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addComment()}
+            style={{ marginBottom: 0 }}
           />
+
           <button className="btn btn-primary" onClick={addComment}>
             Add Comment
           </button>
@@ -96,6 +99,15 @@ const ArticleDetails = () => {
       ))}
     </div>
   );
+};
+
+const styles = {
+  commentBox: {
+    display: "flex",
+    gap: "12px",
+    alignItems: "center",
+    marginTop: "15px"
+  }
 };
 
 export default ArticleDetails;

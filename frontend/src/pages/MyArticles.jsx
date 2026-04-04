@@ -62,7 +62,7 @@ const MyArticles = () => {
         <div key={a._id} className="card">
           <h3>{a.title}</h3>
 
-          <button onClick={() => deleteArticle(a._id)}>
+          <button className="btn btn-danger" onClick={() => deleteArticle(a._id)}>
             Move to Trash
           </button>
         </div>
@@ -80,7 +80,7 @@ const MyArticles = () => {
           <div key={a._id} className="card">
             <h3>{a.title}</h3>
 
-            <button onClick={() => restoreArticle(a._id)}>
+            <button className="btn btn-success" onClick={() => restoreArticle(a._id)}>
               Restore
             </button>
           </div>
