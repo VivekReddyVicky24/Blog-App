@@ -3,6 +3,9 @@
 import { Link } from 'react-router-dom';
 
 export default function HeroSection() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const canWrite = user && (user.role === "author" || user.role === "admin");
+
   return (
     <section className="hero">
       <div className="hero__bg" />
@@ -22,7 +25,7 @@ export default function HeroSection() {
 
         <div className="animate-fadeup stagger-3" style={{ display: 'flex', gap: 'var(--sp-4)', flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link to="/" className="btn btn-primary btn-lg">Browse articles</Link>
-          <Link to="/create" className="btn btn-ghost btn-lg">Start writing</Link>
+          {canWrite && <Link to="/create" className="btn btn-ghost btn-lg">Start writing</Link>}
         </div>
       </div>
     </section>

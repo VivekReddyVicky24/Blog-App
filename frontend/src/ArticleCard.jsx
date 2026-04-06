@@ -34,12 +34,12 @@ export default function ArticleCard({ article }) {
         <div className="article-card__image">
           {imageUrl
             ? <img src={imageUrl} alt={title} loading="lazy" />
-            : <PlaceholderCover title={title} />}
+            : <PlaceholderCover title={title} author={author} />}
         </div>
 
         <div className="article-card__content">
           {category && (
-            <span className="badge badge-rose">{category}</span>
+            <span className="badge badge-rose" style={{ display: 'inline-block', width: 'fit-content', marginBottom: 'var(--sp-3)' }}>{category}</span>
           )}
 
           <h3 className="article-card__title">{title}</h3>
@@ -70,7 +70,7 @@ export default function ArticleCard({ article }) {
   );
 }
 
-function PlaceholderCover({ title }) {
+function PlaceholderCover({ title, author }) {
   const colors = [
     ['var(--rose-light)', 'var(--sky-light)'],
     ['var(--sky-light)', 'var(--mint-light)'],
@@ -78,6 +78,10 @@ function PlaceholderCover({ title }) {
     ['var(--cream-light)', 'var(--rose-light)'],
   ];
   const pair = colors[(title?.length ?? 0) % colors.length];
+  
+  const displayText = author?.name 
+    ? author.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+    : title?.slice(0, 2) ?? 'Bl';
 
   return (
     <div style={{
@@ -87,7 +91,7 @@ function PlaceholderCover({ title }) {
       fontSize: '2rem', color: 'var(--text-muted)', fontFamily: 'var(--font-display)',
       fontStyle: 'italic', padding: 'var(--sp-6)', textAlign: 'center',
     }}>
-      {title?.slice(0, 2) ?? 'Bl'}
+      {displayText}
     </div>
   );
 }
