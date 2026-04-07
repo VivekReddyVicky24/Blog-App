@@ -3,17 +3,20 @@ const Article = require("../models/Article");
 // CREATE ARTICLE
 exports.createArticle = async (req, res) => {
   try {
-    const { title, content, category } = req.body;
+    if (req.user.role !== "author") {
+      return res.status(403).json({
+        message: "Only authors can create articles"
+      });
+    }
 
     const article = await Article.create({
-      title,
-      content,
-      category: category || "Other",
-      image: req.file ? req.file.path : "",
+      title: req.body.title,
+      content: req.body.content,
       author: req.user._id,
     });
 
     res.status(201).json(article);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -11,11 +11,12 @@ const {
   getDeletedArticles,
 } = require("../controllers/articleController");
 
-const { protect, authorOnly, adminOnly } = require("../middleware/authMiddleware");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
+const authorOnly = require("../middleware/authorOnly");
 const upload = require("../middleware/uploadMiddleware");
 
 // CREATE
-router.post("/", protect, authorOnly, upload.single("image"), createArticle);
+router.post("/", protect, authorOnly, createArticle);
 
 // GET ALL
 router.get("/", getArticles);

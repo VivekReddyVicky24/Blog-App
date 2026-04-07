@@ -38,8 +38,8 @@ export default function Navbar() {
 
         <div className="navbar__nav">
           <NavLink to="/" end className={({ isActive }) => `navbar__link${isActive ? ' active' : ''}`}>Home</NavLink>
-          {(user?.role === 'author' || user?.role === 'admin') && (
-            <NavLink to="/create" className={({ isActive }) => `navbar__link${isActive ? ' active' : ''}`}>Write</NavLink>
+          {user?.role === "author" && (
+            <Link to="/create">Write</Link>
           )}
           {user?.role === 'admin' && (
             <NavLink to="/admin"  className={({ isActive }) => `navbar__link${isActive ? ' active' : ''}`}>Dashboard</NavLink>
@@ -95,8 +95,8 @@ export default function Navbar() {
       {menuOpen && (
         <div className="navbar__mobile-menu">
           <NavLink to="/" end        className="navbar__mobile-link" onClick={() => setMenuOpen(false)}>Home</NavLink>
-          {(user?.role === 'author' || user?.role === 'admin') && (
-            <NavLink to="/create"    className="navbar__mobile-link" onClick={() => setMenuOpen(false)}>Write</NavLink>
+          {user?.role === "author" && (
+            <Link to="/create" onClick={() => setMenuOpen(false)}>Write</Link>
           )}
           {user?.role === 'admin' && (
             <NavLink to="/admin"     className="navbar__mobile-link" onClick={() => setMenuOpen(false)}>Dashboard</NavLink>

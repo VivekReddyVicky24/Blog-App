@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export default function HeroSection() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const canWrite = user && (user.role === "author" || user.role === "admin");
+  const canWrite = user && user.role === "author";
 
   return (
     <section className="hero">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,13 @@ const CreateArticle = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+
+  useEffect(() => {
+    if (user?.role !== "author") {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
