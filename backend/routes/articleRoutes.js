@@ -9,6 +9,8 @@ const {
   deleteArticle,
   restoreArticle,
   getDeletedArticles,
+  searchArticles,
+  toggleLike,
 } = require("../controllers/articleController");
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
@@ -16,10 +18,13 @@ const authorOnly = require("../middleware/authorOnly");
 const upload = require("../middleware/uploadMiddleware");
 
 // CREATE
-router.post("/", protect, authorOnly, createArticle);
+router.post("/", protect, authorOnly, upload.single("image"), createArticle);
 
 // GET ALL
 router.get("/", getArticles);
+
+// SEARCH
+router.get("/search/query", searchArticles);
 
 // GET DELETED
 router.get("/deleted", protect, getDeletedArticles);
@@ -35,5 +40,8 @@ router.delete("/:id", protect, authorOnly, deleteArticle);
 
 // RESTORE
 router.put("/restore/:id", protect, authorOnly, restoreArticle);
+
+// LIKE/UNLIKE
+router.post("/:id/like", protect, toggleLike);
 
 module.exports = router;

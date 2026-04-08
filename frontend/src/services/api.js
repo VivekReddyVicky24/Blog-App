@@ -15,4 +15,11 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+// Search articles by query
+export const searchArticles = (query) => {
+  return API.get("/articles/search/query", {
+    params: { q: query }
+  });
+};
+
 export default API;

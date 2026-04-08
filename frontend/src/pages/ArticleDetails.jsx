@@ -8,6 +8,8 @@ const ArticleDetails = () => {
 
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -16,6 +18,10 @@ const ArticleDetails = () => {
     try {
       const { data } = await API.get(`/articles/${id}`);
       setArticle(data);
+      setLikeCount(data.likes || 0);
+      if (user) {
+        setIsLiked(data.likedBy?.some(u => u._id === user._id) || false);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -28,6 +34,23 @@ const ArticleDetails = () => {
       setComments(data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  // handle like
+  const handleLike = async () => {
+    if (!user) {
+      alert("Please login to like articles");
+      return;
+    }
+
+    try {
+      const { data } = await API.post(`/articles/${id}/like`);
+      setIsLiked(data.isLiked);
+      setLikeCount(data.likes);
+    } catch (error) {
+      console.error("Failed to like article:", error);
+      alert("Failed to like article");
     }
   };
 
@@ -64,6 +87,10 @@ const ArticleDetails = () => {
     ? new Date(article.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
     : '';
 
+  // Calculate reading time (average 200 words per minute)
+  const wordCount = article.content?.split(/\s+/).length || 0;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
   return (
     <article style={{ background: 'var(--bg-page)', minHeight: '100vh', paddingBottom: 'var(--sp-12)' }}>
       {/* Hero image with shadow */}
@@ -96,7 +123,7 @@ const ArticleDetails = () => {
             <h1 className="h1" style={{ marginBottom: 'var(--sp-6)' }}>{article.title}</h1>
             
             {article.author && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)', marginBottom: 'var(--sp-4)' }}>
                 <div className="avatar avatar-md avatar-rose">
                   {article.author.name?.slice(0, 2).toUpperCase() ?? 'AU'}
                 </div>
@@ -110,6 +137,12 @@ const ArticleDetails = () => {
                 </div>
               </div>
             )}
+
+            {/* Stats Row */}
+            <div style={{ display: 'flex', gap: 'var(--sp-6)', alignItems: 'center', flexWrap: 'wrap', marginTop: 'var(--sp-4)', padding: '12px 0', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+              <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>📖 {readingTime} min read</span>
+              <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>👁️ {article.views || 0} views</span>
+            </div>
           </div>
 
           {/* Divider */}
@@ -120,7 +153,7 @@ const ArticleDetails = () => {
             fontSize: 'var(--text-lg)', 
             lineHeight: 1.8, 
             color: 'var(--text-primary)',
-            marginBottom: 'var(--sp-8)',
+            marginBottom: 'var(--sp-10)',
             maxWidth: '100%',
             wordWrap: 'break-word',
             whiteSpace: 'pre-wrap'
@@ -129,6 +162,53 @@ const ArticleDetails = () => {
           </div>
 
           {/* Divider */}
+          <hr style={{ borderColor: 'var(--border-weak)', marginBottom: 'var(--sp-8)' }} />
+
+          {/* Like and Share Section */}
+          <div style={{
+            display: 'flex',
+            gap: 'var(--sp-4)',
+            alignItems: 'center',
+            padding: 'var(--sp-6)',
+            background: 'linear-gradient(135deg, rgba(244,63,94,0.05) 0%, rgba(244,63,94,0.02) 100%)',
+            borderRadius: '12px',
+            marginBottom: 'var(--sp-10)'
+          }}>
+            <button
+              onClick={handleLike}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: isLiked ? 'linear-gradient(135deg, var(--rose) 0%, #d1495f 100%)' : 'white',
+                border: isLiked ? 'none' : '2px solid var(--rose)',
+                color: isLiked ? 'white' : 'var(--rose)',
+                padding: '10px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: 'var(--text-base)',
+                fontWeight: 600,
+                transition: 'all var(--dur-fast)',
+                boxShadow: isLiked ? '0 4px 12px rgba(244,63,94,0.3)' : 'none'
+              }}
+              onMouseEnter={(e) => {
+                if (!isLiked) {
+                  e.target.style.background = 'var(--rose)';
+                  e.target.style.color = 'white';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isLiked) {
+                  e.target.style.background = 'white';
+                  e.target.style.color = 'var(--rose)';
+                }
+              }}
+            >
+              {isLiked ? '❤️' : '🤍'} <span>{likeCount} {likeCount === 1 ? 'like' : 'likes'}</span>
+            </button>
+            <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)', margin: 0 }}>Did you enjoy this article?</p>
+          </div>
+          
           <hr style={{ borderColor: 'var(--border-weak)', marginBottom: 'var(--sp-10)' }} />
         </div>
       </div>

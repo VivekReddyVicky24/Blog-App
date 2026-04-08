@@ -21,6 +21,18 @@ const articleSchema = new mongoose.Schema(
     deletedAt: {
       type: Date,
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }],
   },
   { timestamps: true }
 );

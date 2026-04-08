@@ -5,6 +5,7 @@ import '../Navbar.css';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
   const navigate = useNavigate();
 
   // ── Real auth from localStorage ──────────────────────────────
@@ -14,6 +15,19 @@ export default function Navbar() {
     localStorage.removeItem('user');
     setMenuOpen(false);
     navigate('/login');
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchInput.trim()) {
+      navigate('/');
+      // Trigger search through the home page's search input
+      setTimeout(() => {
+        const searchEvent = new CustomEvent('triggerSearch', { detail: searchInput });
+        window.dispatchEvent(searchEvent);
+      }, 100);
+      setSearchInput('');
+    }
   };
   // ────────────────────────────────────────────────────────────
 
@@ -46,6 +60,47 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Search Bar */}
+        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', marginRight: '16px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'white',
+            borderRadius: '8px',
+            padding: '8px 12px',
+            border: '2px solid transparent',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            transition: 'all var(--dur-fast)',
+            minWidth: '240px'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(244,63,94,0.15)';
+            e.currentTarget.style.borderColor = 'var(--rose)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
+            e.currentTarget.style.borderColor = 'transparent';
+          }}
+          >
+            <span style={{ marginRight: '8px', fontSize: '16px' }}>🔍</span>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                color: 'var(--text-primary)',
+                fontSize: 'var(--text-sm)',
+                outline: 'none',
+                width: '100%',
+                fontFamily: 'inherit'
+              }}
+            />
+          </div>
+        </form>
+
         <div className="navbar__actions">
           {user ? (
             <div style={{ position: 'relative' }}>
@@ -61,7 +116,7 @@ export default function Navbar() {
               </div>
               {menuOpen && (
                 <div className="navbar__dropdown">
-                  {user.role !== 'user' && (
+                  {user?.role === "author" && (
                     <Link to="/my-articles" className="navbar__dropdown-item" onClick={() => setMenuOpen(false)}>My Articles</Link>
                   )}
                   <hr className="navbar__dropdown-divider" />

@@ -12,6 +12,8 @@ exports.createArticle = async (req, res) => {
     const article = await Article.create({
       title: req.body.title,
       content: req.body.content,
+      category: req.body.category || "Other",
+      image: req.file ? req.file.path : null,
       author: req.user._id,
     });
 
@@ -39,11 +41,16 @@ exports.getArticles = async (req, res) => {
 exports.getArticleById = async (req, res) => {
   try {
     const article = await Article.findById(req.params.id)
-      .populate("author", "name email");
+      .populate("author", "name email")
+      .populate("likedBy", "name email");
 
     if (!article || article.isDeleted) {
       return res.status(404).json({ message: "Article not found" });
     }
+
+    // Increment views
+    article.views += 1;
+    await article.save();
 
     res.json(article);
   } catch (error) {
@@ -99,6 +106,14 @@ exports.deleteArticle = async (req, res) => {
       return res.status(403).json({ message: "Not allowed" });
     }
 
+    // Check if permanent delete is requested
+    if (req.query.permanent === 'true') {
+      // Permanent delete from database
+      await Article.findByIdAndDelete(req.params.id);
+      return res.json({ message: "Article permanently deleted" });
+    }
+
+    // Soft delete (move to trash)
     article.isDeleted = true;
     article.deletedAt = new Date();
 
@@ -137,6 +152,32 @@ exports.restoreArticle = async (req, res) => {
   }
 };
 
+// SEARCH ARTICLES
+exports.searchArticles = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || q.trim() === '') {
+      return res.status(400).json({ message: "Search query cannot be empty" });
+    }
+
+    const regex = new RegExp(q, 'i'); // case-insensitive search
+    const articles = await Article.find({
+      isDeleted: false,
+      $or: [
+        { title: regex },
+        { content: regex }
+      ]
+    })
+      .populate("author", "name email")
+      .sort({ createdAt: -1 });
+
+    res.json(articles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // GET DELETED ARTICLES
 exports.getDeletedArticles = async (req, res) => {
   try {
@@ -154,6 +195,39 @@ exports.getDeletedArticles = async (req, res) => {
     console.log("DELETED ARTICLES:", articles.length);
 
     res.json(articles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// LIKE/UNLIKE ARTICLE
+exports.toggleLike = async (req, res) => {
+  try {
+    const article = await Article.findById(req.params.id);
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    const userId = req.user._id.toString();
+    const alreadyLiked = article.likedBy.some(id => id.toString() === userId);
+
+    if (alreadyLiked) {
+      // Unlike
+      article.likedBy = article.likedBy.filter(id => id.toString() !== userId);
+      article.likes -= 1;
+    } else {
+      // Like
+      article.likedBy.push(req.user._id);
+      article.likes += 1;
+    }
+
+    await article.save();
+    res.json({ 
+      message: alreadyLiked ? "Article unliked" : "Article liked",
+      likes: article.likes,
+      isLiked: !alreadyLiked
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
