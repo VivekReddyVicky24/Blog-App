@@ -11,7 +11,7 @@
   box-shadow: var(--shadow-xl);
   min-width: 180px;
   padding: var(--sp-2);
-  z-index: 200;
+  z-index: 300;
   animation: fadeUp 180ms var(--ease-out) both;
 }
 
@@ -30,8 +30,8 @@
   font-family: var(--font-body);
 }
 
-.navbar__dropdown-item:hover           { background: var(--rose-light); color: var(--accent); }
-.navbar__dropdown-item--danger:hover   { background: #FEE2E2; color: #991B1B; }
+.navbar__dropdown-item:hover           { background: var(--accent-light); color: var(--accent); }
+.navbar__dropdown-item--danger:hover   { background: rgba(255, 0, 0, 0.15); color: #991B1B; }
 .navbar__dropdown-divider              { border: none; border-top: 1px solid var(--border-weak); margin: var(--sp-2) 0; }
 
 .navbar__mobile-menu {

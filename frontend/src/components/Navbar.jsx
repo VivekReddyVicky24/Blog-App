@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import ThemeSwitcher from './ThemeSwitcher';
 import '../Navbar.css';
 
 export default function Navbar() {
@@ -53,7 +54,7 @@ export default function Navbar() {
         <div className="navbar__nav">
           <NavLink to="/" end className={({ isActive }) => `navbar__link${isActive ? ' active' : ''}`}>Home</NavLink>
           {user?.role === "author" && (
-            <Link to="/create">Write</Link>
+            <Link to="/create" className="navbar__link">Write</Link>
           )}
           {user?.role === 'admin' && (
             <NavLink to="/admin"  className={({ isActive }) => `navbar__link${isActive ? ' active' : ''}`}>Dashboard</NavLink>
@@ -65,7 +66,7 @@ export default function Navbar() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            background: 'white',
+            background: 'var(--bg-surface)',
             borderRadius: '8px',
             padding: '8px 12px',
             border: '2px solid transparent',
@@ -100,6 +101,8 @@ export default function Navbar() {
             />
           </div>
         </form>
+
+        <ThemeSwitcher />
 
         <div className="navbar__actions">
           {user ? (

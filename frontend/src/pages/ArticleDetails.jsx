@@ -107,7 +107,7 @@ const ArticleDetails = () => {
       <div className="container" style={{ maxWidth: 'var(--container-md)', paddingTop: 'var(--sp-12)' }}>
         {/* Article card wrapper */}
         <div style={{ 
-          background: 'white', 
+          background: 'var(--bg-surface)', 
           borderRadius: 'var(--r-lg)',
           padding: 'var(--sp-10)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
@@ -170,9 +170,10 @@ const ArticleDetails = () => {
             gap: 'var(--sp-4)',
             alignItems: 'center',
             padding: 'var(--sp-6)',
-            background: 'linear-gradient(135deg, rgba(244,63,94,0.05) 0%, rgba(244,63,94,0.02) 100%)',
+            background: 'var(--accent-light)',
             borderRadius: '12px',
-            marginBottom: 'var(--sp-10)'
+            marginBottom: 'var(--sp-10)',
+            opacity: 0.3
           }}>
             <button
               onClick={handleLike}
@@ -180,9 +181,9 @@ const ArticleDetails = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                background: isLiked ? 'linear-gradient(135deg, var(--rose) 0%, #d1495f 100%)' : 'white',
-                border: isLiked ? 'none' : '2px solid var(--rose)',
-                color: isLiked ? 'white' : 'var(--rose)',
+                background: isLiked ? 'var(--accent)' : 'var(--bg-surface)',
+                border: isLiked ? 'none' : `2px solid var(--accent)`,
+                color: isLiked ? 'var(--accent-fg)' : 'var(--accent)',
                 padding: '10px 16px',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -193,14 +194,14 @@ const ArticleDetails = () => {
               }}
               onMouseEnter={(e) => {
                 if (!isLiked) {
-                  e.target.style.background = 'var(--rose)';
-                  e.target.style.color = 'white';
+                  e.target.style.background = 'var(--accent)';
+                  e.target.style.color = 'var(--accent-fg)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isLiked) {
-                  e.target.style.background = 'white';
-                  e.target.style.color = 'var(--rose)';
+                  e.target.style.background = 'var(--bg-surface)';
+                  e.target.style.color = 'var(--accent)';
                 }
               }}
             >

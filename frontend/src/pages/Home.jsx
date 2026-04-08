@@ -99,7 +99,7 @@ const Home = () => {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'white',
+              background: 'var(--bg-surface)',
               borderRadius: '12px',
               padding: '14px 18px',
               border: '2px solid transparent',
@@ -146,23 +146,23 @@ const Home = () => {
                   fontSize: 'var(--text-sm)',
                   fontWeight: 600,
                   transition: 'all var(--dur-fast)',
-                  border: selectedCategory === cat ? 'none' : '2px solid var(--rose)',
+                  border: selectedCategory === cat ? 'none' : `2px solid var(--accent)`,
                   borderRadius: '20px',
-                  background: selectedCategory === cat ? 'linear-gradient(135deg, var(--rose) 0%, #d1495f 100%)' : 'white',
-                  color: selectedCategory === cat ? 'white' : 'var(--rose)',
+                  background: selectedCategory === cat ? 'var(--accent)' : 'var(--bg-surface)',
+                  color: selectedCategory === cat ? 'var(--accent-fg)' : 'var(--accent)',
                   boxShadow: selectedCategory === cat ? '0 4px 12px rgba(244,63,94,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
                 }}
                 onMouseEnter={(e) => {
                   if (selectedCategory !== cat) {
-                    e.target.style.background = 'var(--rose)';
-                    e.target.style.color = 'white';
-                    e.target.style.boxShadow = '0 4px 12px rgba(244,63,94,0.25)';
+                    e.target.style.background = 'var(--accent)';
+                    e.target.style.color = 'var(--accent-fg)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (selectedCategory !== cat) {
-                    e.target.style.background = 'white';
-                    e.target.style.color = 'var(--rose)';
+                    e.target.style.background = 'var(--bg-surface)';
+                    e.target.style.color = 'var(--accent)';
                     e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                   }
                 }}

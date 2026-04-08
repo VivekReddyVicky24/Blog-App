@@ -8,26 +8,26 @@
 
 /* ── TOKENS ────────────────────────────────────────────────── */
 :root {
-  /* Palette — Pastel Bloom */
-  --rose:        #F9B2D7;
-  --rose-light:  #FDE8F2;
-  --rose-dark:   #D4638F;
-  --rose-deep:   #9E2B5F;
+  /* Palette — Pastel Bloom (default) */
+  --rose:        #E8629B;
+  --rose-light:  #F9B2D7;
+  --rose-dark:   #C41652;
+  --rose-deep:   #A00D47;
 
-  --sky:         #CFECF3;
-  --sky-light:   #EAF7FB;
-  --sky-dark:    #6BBDD4;
-  --sky-deep:    #2A7A95;
+  --sky:         #6BA3B8;
+  --sky-light:   #CFECF3;
+  --sky-dark:    #2A7A95;
+  --sky-deep:    #1A4F63;
 
-  --mint:        #DAF9DE;
-  --mint-light:  #EDFBEF;
-  --mint-dark:   #70D983;
-  --mint-deep:   #286B35;
+  --mint:        #4CAF50;
+  --mint-light:  #DAF9DE;
+  --mint-dark:   #2E7D32;
+  --mint-deep:   #1B5E20;
 
-  --cream:       #F6FFDC;
-  --cream-light: #FAFFEE;
-  --cream-dark:  #C8D97A;
-  --cream-deep:  #6B7A1A;
+  --cream:       #D4A574;
+  --cream-light: #F6FFDC;
+  --cream-dark:  #8B6F47;
+  --cream-deep:  #5C4A33;
 
   /* Neutral scale */
   --stone-50:  #FAFAF9;
@@ -55,15 +55,15 @@
   --text-primary:   #1C1917;
   --text-secondary: #57534E;
   --text-muted:     #A8A29E;
-  --text-on-rose:   #7A1A40;
-  --text-on-sky:    #164E63;
-  --text-on-mint:   #14532D;
-  --text-on-cream:  #3D4E00;
+  --text-on-rose:   #FFFFFF;
+  --text-on-sky:    #FFFFFF;
+  --text-on-mint:   #FFFFFF;
+  --text-on-cream:  #FFFFFF;
 
   /* Accent (rose is primary CTA) */
-  --accent:         #D4638F;
+  --accent:         #E8629B;
   --accent-light:   #F9B2D7;
-  --accent-hover:   #BE4A75;
+  --accent-hover:   #D4547F;
   --accent-fg:      #FFFFFF;
 
   /* Typography */
@@ -125,6 +125,177 @@
   --container-2xl: 1400px;
   --nav-h:         64px;
   --sidebar-w:     260px;
+}
+
+/* THEME: Modern Dark */
+[data-theme="dark"] {
+  --rose:        #FF6B9D;
+  --rose-light:  #FFB3D9;
+  --rose-dark:   #E61E63;
+  --rose-deep:   #C41652;
+
+  --sky:         #00D9FF;
+  --sky-light:   #66E6FF;
+  --sky-dark:    #0099CC;
+  --sky-deep:    #006699;
+
+  --mint:        #00FF88;
+  --mint-light:  #66FFB3;
+  --mint-dark:   #00CC6F;
+  --mint-deep:   #009955;
+
+  --cream:       #FFE066;
+  --cream-light: #FFF0B3;
+  --cream-dark:  #FFCC00;
+  --cream-deep:  #CCAA00;
+
+  --stone-50:  #2D2D2D;
+  --stone-100: #3A3A3A;
+  --stone-200: #4A4A4A;
+  --stone-300: #5A5A5A;
+  --stone-400: #808080;
+  --stone-500: #A0A0A0;
+  --stone-600: #B0B0B0;
+  --stone-700: #C0C0C0;
+  --stone-800: #E8E8E8;
+  --stone-900: #F5F5F5;
+
+  --bg-page:        #0D0D0D;
+  --bg-surface:     #1A1A1A;
+  --bg-elevated:    #242424;
+  --bg-subtle:      #2D2D2D;
+  --bg-overlay:     rgba(0, 0, 0, 0.7);
+
+  --border-weak:    rgba(255,255,255,0.10);
+  --border-default: rgba(255,255,255,0.18);
+  --border-strong:  rgba(255,255,255,0.30);
+
+  --text-primary:   #F0F0F0;
+  --text-secondary: #B8B8B8;
+  --text-muted:     #808080;
+  --text-on-rose:   #FFE6F0;
+  --text-on-sky:    #E0F7FA;
+  --text-on-mint:   #E8F5E9;
+  --text-on-cream:  #333333;
+
+  --accent:         #FF6B9D;
+  --accent-light:   #FFB3D9;
+  --accent-hover:   #FF5088;
+  --accent-fg:      #FFFFFF;
+}
+
+/* THEME: Vibrant Tropical */
+[data-theme="tropical"] {
+  --rose:        #FF5722;
+  --rose-light:  #FFCCBB;
+  --rose-dark:   #E64A19;
+  --rose-deep:   #CC3D15;
+
+  --sky:         #FF9500;
+  --sky-light:   #FFD9B3;
+  --sky-dark:    #FF7700;
+  --sky-deep:    #E65100;
+
+  --mint:        #4CAF50;
+  --mint-light:  #C8E6C9;
+  --mint-dark:   #388E3C;
+  --mint-deep:   #1B5E20;
+
+  --cream:       #FFC107;
+  --cream-light: #FFECB3;
+  --cream-dark:  #FFA000;
+  --cream-deep:  #FF6F00;
+
+  --stone-50:  #F5F5F5;
+  --stone-100: #EEEEEE;
+  --stone-200: #E0E0E0;
+  --stone-300: #D0D0D0;
+  --stone-400: #BDBDBD;
+  --stone-500: #9E9E9E;
+  --stone-600: #757575;
+  --stone-700: #616161;
+  --stone-800: #424242;
+  --stone-900: #212121;
+
+  --bg-page:        #FAFAFA;
+  --bg-surface:     #FFFFFF;
+  --bg-elevated:    #F5F5F5;
+  --bg-subtle:      #EEEEEE;
+  --bg-overlay:     rgba(33, 33, 33, 0.5);
+
+  --border-weak:    rgba(0,0,0,0.06);
+  --border-default: rgba(0,0,0,0.12);
+  --border-strong:  rgba(0,0,0,0.20);
+
+  --text-primary:   #1A1A1A;
+  --text-secondary: #616161;
+  --text-muted:     #9E9E9E;
+  --text-on-rose:   #FFFFFF;
+  --text-on-sky:    #FFFFFF;
+  --text-on-mint:   #FFFFFF;
+  --text-on-cream:  #212121;
+
+  --accent:         #FF5722;
+  --accent-light:   #FFCCBB;
+  --accent-hover:   #E64A19;
+  --accent-fg:      #FFFFFF;
+}
+
+/* THEME: Ocean Serenity */
+[data-theme="ocean"] {
+  --rose:        #0EA5E9;
+  --rose-light:  #BAE6FD;
+  --rose-dark:   #0284C7;
+  --rose-deep:   #0369A1;
+
+  --sky:         #06B6D4;
+  --sky-light:   #CFFAFE;
+  --sky-dark:    #0891B2;
+  --sky-deep:    #086EAA;
+
+  --mint:        #10B981;
+  --mint-light:  #D1FAE5;
+  --mint-dark:   #059669;
+  --mint-deep:   #027A48;
+
+  --cream:       #FBBF24;
+  --cream-light: #FEF3C7;
+  --cream-dark:  #F59E0B;
+  --cream-deep:  #D97706;
+
+  --stone-50:  #F8FAFC;
+  --stone-100: #F1F5F9;
+  --stone-200: #E2E8F0;
+  --stone-300: #CBD5E1;
+  --stone-400: #94A3B8;
+  --stone-500: #64748B;
+  --stone-600: #475569;
+  --stone-700: #334155;
+  --stone-800: #1E293B;
+  --stone-900: #0F172A;
+
+  --bg-page:        #F8FAFC;
+  --bg-surface:     #FFFFFF;
+  --bg-elevated:    #F1F5F9;
+  --bg-subtle:      #E2E8F0;
+  --bg-overlay:     rgba(15, 23, 42, 0.5);
+
+  --border-weak:    rgba(0,0,0,0.06);
+  --border-default: rgba(0,0,0,0.12);
+  --border-strong:  rgba(0,0,0,0.20);
+
+  --text-primary:   #0F172A;
+  --text-secondary: #475569;
+  --text-muted:     #94A3B8;
+  --text-on-rose:   #FFFFFF;
+  --text-on-sky:    #FFFFFF;
+  --text-on-mint:   #FFFFFF;
+  --text-on-cream:  #1A1A1A;
+
+  --accent:         #0EA5E9;
+  --accent-light:   #BAE6FD;
+  --accent-hover:   #0284C7;
+  --accent-fg:      #FFFFFF;
 }
 
 /* ── RESET ─────────────────────────────────────────────────── */
@@ -198,12 +369,14 @@ h5, .h5 { font-size: var(--text-base); font-weight: 600; }
   top: 0;
   z-index: 100;
   height: var(--nav-h);
-  background: rgba(250, 250, 249, 0.80);
+  background: rgba(0, 0, 0, 0.02);
   backdrop-filter: blur(16px) saturate(1.8);
   -webkit-backdrop-filter: blur(16px) saturate(1.8);
   border-bottom: 1px solid var(--border-weak);
   transition: border-color var(--dur-base) var(--ease-out),
-              box-shadow var(--dur-base) var(--ease-out);
+              box-shadow var(--dur-base) var(--ease-out),
+              background var(--dur-base) var(--ease-out);
+  background-color: var(--bg-surface);
 }
 
 .navbar.scrolled {
