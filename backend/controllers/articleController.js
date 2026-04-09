@@ -200,6 +200,21 @@ exports.getDeletedArticles = async (req, res) => {
   }
 };
 
+// GET FEATURED ARTICLES (TOP ARTICLES - PUBLIC)
+exports.getFeaturedArticles = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 6;
+    const articles = await Article.find({ isDeleted: false })
+      .populate("author", "name email")
+      .sort({ views: -1, createdAt: -1 })
+      .limit(limit);
+
+    res.json(articles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // LIKE/UNLIKE ARTICLE
 exports.toggleLike = async (req, res) => {
   try {

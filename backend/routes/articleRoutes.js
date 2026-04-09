@@ -11,6 +11,7 @@ const {
   getDeletedArticles,
   searchArticles,
   toggleLike,
+  getFeaturedArticles,
 } = require("../controllers/articleController");
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
@@ -22,6 +23,9 @@ router.post("/", protect, authorOnly, upload.single("image"), createArticle);
 
 // GET ALL
 router.get("/", getArticles);
+
+// GET FEATURED (PUBLIC - for landing page)
+router.get("/featured/top", getFeaturedArticles);
 
 // SEARCH
 router.get("/search/query", searchArticles);

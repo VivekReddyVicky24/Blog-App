@@ -3,12 +3,16 @@ import API from "../services/api";
 import { searchArticles } from "../services/api";
 import HeroSection from "../HeroSection";
 import ArticleCard from "../ArticleCard";
+import LandingPage from "./LandingPage";
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isGuest = !user;
 
   const categories = ["All", "Technology", "Lifestyle", "Design", "Culture", "Science"];
 
@@ -81,6 +85,12 @@ const Home = () => {
     ? articles 
     : articles.filter(a => a.category === selectedCategory);
 
+  // Show Landing Page for guests
+  if (isGuest) {
+    return <LandingPage />;
+  }
+
+  // Show full feed for authenticated users
   return (
     <>
       <HeroSection />
